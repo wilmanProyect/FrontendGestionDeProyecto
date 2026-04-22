@@ -2,7 +2,7 @@
  * Instancia configurada de Axios para todas las peticiones HTTP
  */
 
-import axios, { AxiosInstance, AxiosError } from 'axios';
+import axios, { type AxiosInstance, AxiosError } from 'axios';
 import { API_CONFIG } from '../constants/api.constants';
 
 // Crear instancia base

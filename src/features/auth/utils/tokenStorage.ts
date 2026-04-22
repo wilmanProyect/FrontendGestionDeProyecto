@@ -3,7 +3,7 @@
  */
 
 import { AUTH_STORAGE_KEYS } from '../constants/auth.constants';
-import { UserData } from '../types/auth.types';
+import { type UserData } from '../types/auth.types';
 
 export const tokenStorage = {
   /**

@@ -2,7 +2,7 @@
  * Configuración de rutas principales de la aplicación
  */
 
-import { createBrowserRouter, RouteObject, Navigate } from 'react-router-dom';
+import { createBrowserRouter, type RouteObject, Navigate } from 'react-router-dom';
 import { LoginPage, RegisterPage } from '@/features/auth';
 import { ProtectedRoute } from '@/shared/components/ProtectedRoute';
 import { VerifyEmailPage } from '@/features/auth/pages/VerifyEmailPage';

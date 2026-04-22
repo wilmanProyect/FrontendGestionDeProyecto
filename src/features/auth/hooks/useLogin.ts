@@ -4,7 +4,7 @@
 
 import { useState } from 'react';
 import { authApi } from '../api/authApi';
-import { LoginRequest, LoginResponse, Login2FAResponse } from '../types/auth.types';
+import { type LoginRequest, type LoginResponse, type Login2FAResponse } from '../types/auth.types';
 import { useAuthStore } from '../store/authStore';
 import { AUTH_MESSAGES } from '../constants/auth.constants';
 

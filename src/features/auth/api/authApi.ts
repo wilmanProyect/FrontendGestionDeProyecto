@@ -5,15 +5,15 @@
 
 import axiosInstance from '@/shared/api/axiosInstance';
 import { API_ROUTES } from '@/shared/constants/api.constants';
-import { ApiResponse } from '@/shared/types/api.types';
+import { type ApiResponse } from '@/shared/types/api.types';
 import {
-  LoginRequest,
-  LoginResponse,
-  RegisterRequest,
-  RegisterResponse,
-  VerifyEmailRequest,
-  UserData,
-  Login2FAResponse,
+  type LoginRequest,
+  type LoginResponse,
+  type RegisterRequest,
+  type RegisterResponse,
+  type VerifyEmailRequest,
+  type UserData,
+  type Login2FAResponse,
 } from '../types/auth.types';
 
 class AuthApi {

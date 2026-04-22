@@ -3,7 +3,7 @@
  */
 
 import { create } from 'zustand';
-import { AuthState, UserData } from '../types/auth.types';
+import { type AuthState, type UserData } from '../types/auth.types';
 import { tokenStorage } from '../utils/tokenStorage';
 
 interface AuthActions {
