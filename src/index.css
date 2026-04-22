@@ -1,5 +1,32 @@
 @import "tailwindcss";
 
+@theme {
+  /* Marca principal (Violeta actual) */
+  --color-brand-300: var(--color-violet-300);
+  --color-brand-400: var(--color-violet-400);
+  --color-brand-500: var(--color-violet-500);
+  --color-brand-600: var(--color-violet-600);
+  --color-brand-900: var(--color-violet-900);
+  --color-brand-950: var(--color-violet-950);
+
+  /* Acento (Índigo actual) */
+  --color-accent-300: var(--color-indigo-300);
+  --color-accent-500: var(--color-indigo-500);
+  --color-accent-600: var(--color-indigo-600);
+  --color-accent-900: var(--color-indigo-900);
+  --color-accent-950: var(--color-indigo-950);
+
+  /* Superficies (Slate actual) */
+  --color-surface-300: var(--color-slate-300);
+  --color-surface-400: var(--color-slate-400);
+  --color-surface-500: var(--color-slate-500);
+  --color-surface-600: var(--color-slate-600);
+  --color-surface-700: var(--color-slate-700);
+  --color-surface-800: var(--color-slate-800);
+  --color-surface-900: var(--color-slate-900);
+  --color-surface-950: var(--color-slate-950);
+}
+
 @layer base {
   html, body, #root {
     margin: 0;

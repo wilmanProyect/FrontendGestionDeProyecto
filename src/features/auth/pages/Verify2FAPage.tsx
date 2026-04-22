@@ -61,17 +61,17 @@ export const Verify2FAPage = () => {
   if (!temporaryToken) return null;
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-slate-950 px-6 py-12">
+    <div className="min-h-screen flex items-center justify-center bg-surface-950 px-6 py-12">
       {/* Orbes de fondo */}
-      <div className="fixed top-[-80px] right-[-80px] w-96 h-96 rounded-full bg-violet-600/10 blur-3xl pointer-events-none" />
-      <div className="fixed bottom-[-80px] left-[-80px] w-80 h-80 rounded-full bg-indigo-500/10 blur-3xl pointer-events-none" />
+      <div className="fixed top-[-80px] right-[-80px] w-96 h-96 rounded-full bg-brand-600/10 blur-3xl pointer-events-none" />
+      <div className="fixed bottom-[-80px] left-[-80px] w-80 h-80 rounded-full bg-accent-500/10 blur-3xl pointer-events-none" />
 
       <div className="relative w-full max-w-sm">
         {/* Card */}
-        <div className="bg-slate-900/80 backdrop-blur-xl border border-slate-800 rounded-2xl shadow-2xl shadow-black/40 p-8">
+        <div className="bg-surface-900/80 backdrop-blur-xl border border-surface-800 rounded-2xl shadow-2xl shadow-black/40 p-8">
           {/* Ícono */}
-          <div className="mx-auto mb-6 w-16 h-16 rounded-2xl bg-gradient-to-br from-violet-500/20 to-indigo-600/20 border border-violet-500/30 flex items-center justify-center">
-            <svg className="w-8 h-8 text-violet-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div className="mx-auto mb-6 w-16 h-16 rounded-2xl bg-gradient-to-br from-brand-500/20 to-accent-600/20 border border-brand-500/30 flex items-center justify-center">
+            <svg className="w-8 h-8 text-brand-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
             </svg>
           </div>
@@ -80,7 +80,7 @@ export const Verify2FAPage = () => {
             <h2 className="text-2xl font-bold text-white tracking-tight">
               Autenticación de dos factores
             </h2>
-            <p className="text-slate-400 mt-2 text-sm">
+            <p className="text-surface-400 mt-2 text-sm">
               Ingresa el código de 6 dígitos de tu aplicación autenticadora
             </p>
           </div>
@@ -98,7 +98,7 @@ export const Verify2FAPage = () => {
 
             {/* Input de código grande */}
             <div className="space-y-2">
-              <label htmlFor="totpCode" className="block text-sm font-medium text-slate-300 text-center">
+              <label htmlFor="totpCode" className="block text-sm font-medium text-surface-300 text-center">
                 Código de verificación
               </label>
               <input
@@ -109,10 +109,10 @@ export const Verify2FAPage = () => {
                 maxLength={6}
                 autoComplete="one-time-code"
                 placeholder="000000"
-                className={`block w-full rounded-xl border bg-slate-950 px-4 py-4 text-center text-3xl font-bold tracking-[0.5em] text-white placeholder-slate-700 transition-all duration-200 focus:outline-none focus:ring-2 ${
+                className={`block w-full rounded-xl border bg-surface-950 px-4 py-4 text-center text-3xl font-bold tracking-[0.5em] text-white placeholder-surface-700 transition-all duration-200 focus:outline-none focus:ring-2 ${
                   errors.totpCode
                     ? 'border-red-500/60 focus:ring-red-500/30'
-                    : 'border-slate-700 hover:border-slate-600 focus:ring-violet-500/60 focus:border-violet-500'
+                    : 'border-surface-700 hover:border-surface-600 focus:ring-brand-500/60 focus:border-brand-500'
                 }`}
               />
 
@@ -123,8 +123,8 @@ export const Verify2FAPage = () => {
                     key={i}
                     className={`h-1 w-8 rounded-full transition-all duration-300 ${
                       (codeValue?.length ?? 0) > i
-                        ? 'bg-violet-500'
-                        : 'bg-slate-700'
+                        ? 'bg-brand-500'
+                        : 'bg-surface-700'
                     }`}
                   />
                 ))}
@@ -141,11 +141,11 @@ export const Verify2FAPage = () => {
             </div>
 
             {/* Tip */}
-            <div className="flex items-start gap-2 rounded-xl bg-slate-800/60 border border-slate-700/50 px-3 py-2.5">
-              <svg className="w-4 h-4 text-violet-400 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div className="flex items-start gap-2 rounded-xl bg-surface-800/60 border border-surface-700/50 px-3 py-2.5">
+              <svg className="w-4 h-4 text-brand-400 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
-              <p className="text-xs text-slate-400">
+              <p className="text-xs text-surface-400">
                 Abre tu aplicación de autenticación (Google Authenticator, Authy, etc.) para ver el código actual.
               </p>
             </div>
@@ -154,7 +154,7 @@ export const Verify2FAPage = () => {
             <button
               type="submit"
               disabled={isLoading || (codeValue?.length ?? 0) < 6}
-              className="w-full flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 py-3 px-4 text-sm font-semibold text-white shadow-lg shadow-violet-500/25 transition-all duration-200 hover:from-violet-500 hover:to-indigo-500 hover:shadow-violet-500/40 hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:ring-offset-2 focus:ring-offset-slate-900 disabled:opacity-60 disabled:cursor-not-allowed disabled:transform-none disabled:shadow-none"
+              className="w-full flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-brand-600 to-accent-600 py-3 px-4 text-sm font-semibold text-white shadow-lg shadow-brand-500/25 transition-all duration-200 hover:from-brand-500 hover:to-accent-500 hover:shadow-brand-500/40 hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 focus:ring-offset-surface-900 disabled:opacity-60 disabled:cursor-not-allowed disabled:transform-none disabled:shadow-none"
             >
               {isLoading ? (
                 <>
@@ -170,10 +170,10 @@ export const Verify2FAPage = () => {
             </button>
 
             {/* Volver */}
-            <div className="pt-2 border-t border-slate-800">
+            <div className="pt-2 border-t border-surface-800">
               <a
                 href="/login"
-                className="flex items-center justify-center gap-2 text-sm text-slate-500 hover:text-slate-300 transition-colors duration-200"
+                className="flex items-center justify-center gap-2 text-sm text-surface-500 hover:text-surface-300 transition-colors duration-200"
               >
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />

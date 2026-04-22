@@ -59,7 +59,7 @@ export const VerifyEmailPage = () => {
   /* ——— Estado éxito —————————————————————————————————————— */
   if (success) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-slate-950 px-6">
+      <div className="min-h-screen flex items-center justify-center bg-surface-950 px-6">
         <div className="w-full max-w-md text-center">
           {/* Círculo animado de éxito */}
           <div className="mx-auto mb-6 w-20 h-20 rounded-full bg-emerald-500/10 border-2 border-emerald-500/40 flex items-center justify-center">
@@ -68,10 +68,10 @@ export const VerifyEmailPage = () => {
             </svg>
           </div>
           <h2 className="text-2xl font-bold text-white mb-3">¡Email verificado!</h2>
-          <p className="text-slate-400 mb-6">
+          <p className="text-surface-400 mb-6">
             Tu cuenta ha sido verificada exitosamente. Redirigiendo al login...
           </p>
-          <div className="w-full bg-slate-800 rounded-full h-1.5">
+          <div className="w-full bg-surface-800 rounded-full h-1.5">
             <div className="bg-emerald-500 h-1.5 rounded-full animate-[grow_3s_linear_forwards]" style={{ width: '100%', animation: 'grow 3s linear forwards' }} />
           </div>
         </div>
@@ -81,17 +81,17 @@ export const VerifyEmailPage = () => {
 
   /* ——— Formulario ————————————————————————————————————————— */
   return (
-    <div className="min-h-screen flex items-center justify-center bg-slate-950 px-6 py-12">
+    <div className="min-h-screen flex items-center justify-center bg-surface-950 px-6 py-12">
       {/* Orbes de fondo */}
-      <div className="fixed top-[-100px] left-[-100px] w-96 h-96 rounded-full bg-violet-600/10 blur-3xl pointer-events-none" />
-      <div className="fixed bottom-[-80px] right-[-80px] w-80 h-80 rounded-full bg-indigo-500/10 blur-3xl pointer-events-none" />
+      <div className="fixed top-[-100px] left-[-100px] w-96 h-96 rounded-full bg-brand-600/10 blur-3xl pointer-events-none" />
+      <div className="fixed bottom-[-80px] right-[-80px] w-80 h-80 rounded-full bg-accent-500/10 blur-3xl pointer-events-none" />
 
       <div className="relative w-full max-w-md">
         {/* Card */}
-        <div className="bg-slate-900/80 backdrop-blur-xl border border-slate-800 rounded-2xl shadow-2xl shadow-black/40 p-8">
+        <div className="bg-surface-900/80 backdrop-blur-xl border border-surface-800 rounded-2xl shadow-2xl shadow-black/40 p-8">
           {/* Ícono */}
-          <div className="mx-auto mb-6 w-16 h-16 rounded-2xl bg-gradient-to-br from-violet-500/20 to-indigo-600/20 border border-violet-500/30 flex items-center justify-center">
-            <svg className="w-8 h-8 text-violet-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div className="mx-auto mb-6 w-16 h-16 rounded-2xl bg-gradient-to-br from-brand-500/20 to-accent-600/20 border border-brand-500/30 flex items-center justify-center">
+            <svg className="w-8 h-8 text-brand-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 19v-8.93a2 2 0 01.89-1.664l7-4.666a2 2 0 012.22 0l7 4.666A2 2 0 0121 10.07V19M3 19a2 2 0 002 2h14a2 2 0 002-2M3 19l6.75-4.5M21 19l-6.75-4.5M3 10l6.75 4.5M21 10l-6.75 4.5m0 0l-1.14.76a2 2 0 01-2.22 0l-1.14-.76" />
             </svg>
           </div>
@@ -100,7 +100,7 @@ export const VerifyEmailPage = () => {
             <h2 className="text-2xl font-bold text-white tracking-tight">
               Verifica tu correo
             </h2>
-            <p className="text-slate-400 mt-2 text-sm">
+            <p className="text-surface-400 mt-2 text-sm">
               Ingresa el token que recibiste por correo electrónico
             </p>
           </div>
@@ -118,7 +118,7 @@ export const VerifyEmailPage = () => {
 
             {/* Token */}
             <div className="space-y-1.5">
-              <label htmlFor="token" className="block text-sm font-medium text-slate-300">
+              <label htmlFor="token" className="block text-sm font-medium text-surface-300">
                 Token de verificación
               </label>
               <textarea
@@ -126,10 +126,10 @@ export const VerifyEmailPage = () => {
                 id="token"
                 rows={3}
                 placeholder="Pega aquí el token recibido por correo..."
-                className={`block w-full rounded-xl border bg-slate-950 px-4 py-3 text-sm text-white placeholder-slate-600 resize-none transition-all duration-200 focus:outline-none focus:ring-2 ${
+                className={`block w-full rounded-xl border bg-surface-950 px-4 py-3 text-sm text-white placeholder-surface-600 resize-none transition-all duration-200 focus:outline-none focus:ring-2 ${
                   errors.token
                     ? 'border-red-500/60 focus:ring-red-500/30'
-                    : 'border-slate-700 hover:border-slate-600 focus:ring-violet-500/60 focus:border-violet-500'
+                    : 'border-surface-700 hover:border-surface-600 focus:ring-brand-500/60 focus:border-brand-500'
                 }`}
               />
               {errors.token && (
@@ -146,7 +146,7 @@ export const VerifyEmailPage = () => {
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 py-3 px-4 text-sm font-semibold text-white shadow-lg shadow-violet-500/25 transition-all duration-200 hover:from-violet-500 hover:to-indigo-500 hover:shadow-violet-500/40 hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:ring-offset-2 focus:ring-offset-slate-900 disabled:opacity-60 disabled:cursor-not-allowed disabled:transform-none"
+              className="w-full flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-brand-600 to-accent-600 py-3 px-4 text-sm font-semibold text-white shadow-lg shadow-brand-500/25 transition-all duration-200 hover:from-brand-500 hover:to-accent-500 hover:shadow-brand-500/40 hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 focus:ring-offset-surface-900 disabled:opacity-60 disabled:cursor-not-allowed disabled:transform-none"
             >
               {isLoading ? (
                 <>
@@ -162,21 +162,21 @@ export const VerifyEmailPage = () => {
             </button>
 
             {/* Reenviar */}
-            <p className="text-center text-sm text-slate-500">
+            <p className="text-center text-sm text-surface-500">
               ¿No recibiste el correo?{' '}
               <button
                 type="button"
-                className="text-violet-400 hover:text-violet-300 font-medium transition-colors duration-200"
+                className="text-brand-400 hover:text-brand-300 font-medium transition-colors duration-200"
               >
                 Reenviar email
               </button>
             </p>
 
             {/* Volver */}
-            <div className="pt-2 border-t border-slate-800">
+            <div className="pt-2 border-t border-surface-800">
               <a
                 href="/login"
-                className="flex items-center justify-center gap-2 text-sm text-slate-500 hover:text-slate-300 transition-colors duration-200"
+                className="flex items-center justify-center gap-2 text-sm text-surface-500 hover:text-surface-300 transition-colors duration-200"
               >
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />

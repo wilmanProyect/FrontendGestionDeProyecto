@@ -37,17 +37,17 @@ type RegisterFormData = z.infer<typeof registerSchema>;
 
 // Clase de input reutilizable
 const inputClass = (hasError: boolean) =>
-  `block w-full rounded-xl border bg-slate-900 px-4 py-3 text-sm text-white placeholder-slate-500 transition-all duration-200 focus:outline-none focus:ring-2 ${
+  `block w-full rounded-xl border bg-surface-900 px-4 py-3 text-sm text-white placeholder-surface-500 transition-all duration-200 focus:outline-none focus:ring-2 ${
     hasError
       ? 'border-red-500/60 focus:ring-red-500/30'
-      : 'border-slate-700 hover:border-slate-600 focus:ring-violet-500/60 focus:border-violet-500'
+      : 'border-surface-700 hover:border-surface-600 focus:ring-brand-500/60 focus:border-brand-500'
   }`;
 
 const inputWithIconClass = (hasError: boolean) =>
-  `block w-full rounded-xl border bg-slate-900 pl-10 pr-11 py-3 text-sm text-white placeholder-slate-500 transition-all duration-200 focus:outline-none focus:ring-2 ${
+  `block w-full rounded-xl border bg-surface-900 pl-10 pr-11 py-3 text-sm text-white placeholder-surface-500 transition-all duration-200 focus:outline-none focus:ring-2 ${
     hasError
       ? 'border-red-500/60 focus:ring-red-500/30'
-      : 'border-slate-700 hover:border-slate-600 focus:ring-violet-500/60 focus:border-violet-500'
+      : 'border-surface-700 hover:border-surface-600 focus:ring-brand-500/60 focus:border-brand-500'
   }`;
 
 const FieldError = ({ message }: { message?: string }) =>
@@ -114,7 +114,7 @@ export const RegisterForm = () => {
       {/* Nombre y Apellido */}
       <div className="grid grid-cols-2 gap-3">
         <div className="space-y-1.5">
-          <label htmlFor="firstName" className="block text-sm font-medium text-slate-300">
+          <label htmlFor="firstName" className="block text-sm font-medium text-surface-300">
             Nombre
           </label>
           <input
@@ -128,7 +128,7 @@ export const RegisterForm = () => {
         </div>
 
         <div className="space-y-1.5">
-          <label htmlFor="lastName" className="block text-sm font-medium text-slate-300">
+          <label htmlFor="lastName" className="block text-sm font-medium text-surface-300">
             Apellido
           </label>
           <input
@@ -144,12 +144,12 @@ export const RegisterForm = () => {
 
       {/* Email */}
       <div className="space-y-1.5">
-        <label htmlFor="email" className="block text-sm font-medium text-slate-300">
+        <label htmlFor="email" className="block text-sm font-medium text-surface-300">
           Correo electrónico
         </label>
         <div className="relative">
           <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5">
-            <svg className="h-4 w-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="h-4 w-4 text-surface-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207" />
             </svg>
           </div>
@@ -167,12 +167,12 @@ export const RegisterForm = () => {
 
       {/* Password */}
       <div className="space-y-1.5">
-        <label htmlFor="password" className="block text-sm font-medium text-slate-300">
+        <label htmlFor="password" className="block text-sm font-medium text-surface-300">
           Contraseña
         </label>
         <div className="relative">
           <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5">
-            <svg className="h-4 w-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="h-4 w-4 text-surface-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
             </svg>
           </div>
@@ -187,7 +187,7 @@ export const RegisterForm = () => {
           <button
             type="button"
             onClick={() => setShowPassword((v) => !v)}
-            className="absolute inset-y-0 right-0 flex items-center pr-3.5 text-slate-500 hover:text-slate-300 transition-colors duration-200"
+            className="absolute inset-y-0 right-0 flex items-center pr-3.5 text-surface-500 hover:text-surface-300 transition-colors duration-200"
           >
             <EyeIcon open={showPassword} />
           </button>
@@ -197,12 +197,12 @@ export const RegisterForm = () => {
 
       {/* Confirm Password */}
       <div className="space-y-1.5">
-        <label htmlFor="confirmPassword" className="block text-sm font-medium text-slate-300">
+        <label htmlFor="confirmPassword" className="block text-sm font-medium text-surface-300">
           Confirmar contraseña
         </label>
         <div className="relative">
           <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5">
-            <svg className="h-4 w-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="h-4 w-4 text-surface-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
             </svg>
           </div>
@@ -217,7 +217,7 @@ export const RegisterForm = () => {
           <button
             type="button"
             onClick={() => setShowConfirm((v) => !v)}
-            className="absolute inset-y-0 right-0 flex items-center pr-3.5 text-slate-500 hover:text-slate-300 transition-colors duration-200"
+            className="absolute inset-y-0 right-0 flex items-center pr-3.5 text-surface-500 hover:text-surface-300 transition-colors duration-200"
           >
             <EyeIcon open={showConfirm} />
           </button>
@@ -229,7 +229,7 @@ export const RegisterForm = () => {
       <button
         type="submit"
         disabled={isLoading}
-        className="mt-2 relative w-full flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 py-3 px-4 text-sm font-semibold text-white shadow-lg shadow-violet-500/25 transition-all duration-200 hover:from-violet-500 hover:to-indigo-500 hover:shadow-violet-500/40 hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:ring-offset-2 focus:ring-offset-slate-950 disabled:opacity-60 disabled:cursor-not-allowed disabled:transform-none disabled:shadow-none"
+        className="mt-2 relative w-full flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-brand-600 to-accent-600 py-3 px-4 text-sm font-semibold text-white shadow-lg shadow-brand-500/25 transition-all duration-200 hover:from-brand-500 hover:to-accent-500 hover:shadow-brand-500/40 hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 focus:ring-offset-surface-950 disabled:opacity-60 disabled:cursor-not-allowed disabled:transform-none disabled:shadow-none"
       >
         {isLoading ? (
           <>
@@ -244,9 +244,9 @@ export const RegisterForm = () => {
         )}
       </button>
 
-      <p className="text-center text-xs text-slate-500 mt-3">
+      <p className="text-center text-xs text-surface-500 mt-3">
         Al registrarte aceptas nuestros{' '}
-        <a href="#" className="text-violet-400 hover:text-violet-300 transition-colors">términos y condiciones</a>
+        <a href="#" className="text-brand-400 hover:text-brand-300 transition-colors">términos y condiciones</a>
       </p>
     </form>
   );
