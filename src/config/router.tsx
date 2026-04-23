@@ -7,23 +7,23 @@ import { LoginPage, RegisterPage } from '@/features/auth';
 import { ProtectedRoute } from '@/shared/components/ProtectedRoute';
 import { VerifyEmailPage } from '@/features/auth/pages/VerifyEmailPage';
 import { Verify2FAPage } from '@/features/auth/pages/Verify2FAPage';
+import { DashboardPage } from '@/features/auth/pages/DashboardPage';
 
-// Páginas
-const DashboardPage = () => (
-  <div className="min-h-screen bg-gray-50">
-    <div className="py-12 px-4 sm:px-6 lg:px-8">
-      <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
-      <p className="mt-4 text-gray-600">Bienvenido al sistema de gestión de proyectos</p>
-    </div>
-  </div>
-);
-
+// Página 404
 const NotFoundPage = () => (
-  <div className="min-h-screen flex items-center justify-center bg-gray-50">
+  <div className="min-h-screen flex items-center justify-center bg-surface-950">
     <div className="text-center">
-      <h1 className="text-4xl font-bold text-gray-900">404</h1>
-      <p className="mt-4 text-gray-600">Página no encontrada</p>
-      <a href="/" className="mt-6 inline-block text-blue-600 hover:text-blue-500">
+      <h1 className="text-8xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-brand-400 to-accent-300">
+        404
+      </h1>
+      <p className="mt-4 text-surface-400 text-lg">Página no encontrada</p>
+      <a
+        href="/"
+        className="mt-6 inline-flex items-center gap-2 text-sm text-brand-400 hover:text-brand-300 transition-colors duration-200"
+      >
+        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+        </svg>
         Volver al inicio
       </a>
     </div>

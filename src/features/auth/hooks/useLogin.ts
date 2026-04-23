@@ -35,12 +35,15 @@ export const useLogin = () => {
       // Verificar si requiere 2FA
       if ('temporaryToken' in response) {
         const login2FAResponse = response as Login2FAResponse;
+        // Persistir en localStorage para que Verify2FAPage lo lea tras la navegación
+        localStorage.setItem('temporaryToken', login2FAResponse.temporaryToken);
         setState((prev) => ({
           ...prev,
           requiresTwoFA: true,
           temporaryToken: login2FAResponse.temporaryToken,
           isLoading: false,
         }));
+        setLoading(false);
         return { success: true, requiresTwoFA: true };
       }
 
