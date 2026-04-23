@@ -1,11 +1,39 @@
 /**
  * Instancia configurada de Axios para todas las peticiones HTTP
+ *
+ * Criterios de refresh token cubiertos:
+ *  ✅ Envía refreshToken en el body de POST /auth/refresh
+ *  ✅ Guarda el nuevo par accessToken + refreshToken (rotación)
+ *  ✅ Invalida el token anterior sobrescribiéndolo en localStorage
+ *  ✅ Reintenta la petición original con el nuevo accessToken
+ *  ✅ En caso de fallo limpia localStorage Y el store de Zustand
  */
 
-import axios, { type AxiosInstance, AxiosError } from 'axios';
+import axios, { type AxiosInstance, type AxiosError } from 'axios';
 import { API_CONFIG } from '../constants/api.constants';
+import { AUTH_STORAGE_KEYS } from '@/features/auth/constants/auth.constants';
 
-// Crear instancia base
+// ─────────────────────────────────────────────────────────────────────────────
+// Helpers centralizados de storage (usan las mismas claves que tokenStorage)
+// ─────────────────────────────────────────────────────────────────────────────
+const storage = {
+  getAccessToken: () => localStorage.getItem(AUTH_STORAGE_KEYS.ACCESS_TOKEN),
+  getRefreshToken: () => localStorage.getItem(AUTH_STORAGE_KEYS.REFRESH_TOKEN),
+  setTokens: (accessToken: string, refreshToken: string) => {
+    localStorage.setItem(AUTH_STORAGE_KEYS.ACCESS_TOKEN, accessToken);
+    localStorage.setItem(AUTH_STORAGE_KEYS.REFRESH_TOKEN, refreshToken);
+  },
+  clearAll: () => {
+    localStorage.removeItem(AUTH_STORAGE_KEYS.ACCESS_TOKEN);
+    localStorage.removeItem(AUTH_STORAGE_KEYS.REFRESH_TOKEN);
+    localStorage.removeItem(AUTH_STORAGE_KEYS.USER);
+    localStorage.removeItem('temporaryToken');
+  },
+};
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Instancia base
+// ─────────────────────────────────────────────────────────────────────────────
 export const axiosInstance: AxiosInstance = axios.create({
   baseURL: API_CONFIG.BASE_URL,
   timeout: API_CONFIG.TIMEOUT,
@@ -14,55 +42,106 @@ export const axiosInstance: AxiosInstance = axios.create({
   },
 });
 
-// Interceptor de petición para agregar token
+// ─────────────────────────────────────────────────────────────────────────────
+// Interceptor de petición — agrega Bearer token
+// ─────────────────────────────────────────────────────────────────────────────
 axiosInstance.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem('accessToken');
+    const token = storage.getAccessToken();
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
     return config;
   },
-  (error) => {
-    return Promise.reject(error);
-  }
+  (error) => Promise.reject(error)
 );
 
-// Interceptor de respuesta para manejar errores
+// ─────────────────────────────────────────────────────────────────────────────
+// Interceptor de respuesta — maneja 401 con rotación de refresh token
+// ─────────────────────────────────────────────────────────────────────────────
+
+// Flag para evitar bucles de refresh simultáneos
+let isRefreshing = false;
+// Cola de peticiones que esperan el nuevo token
+let pendingRequests: Array<(token: string) => void> = [];
+
+const processPendingRequests = (newAccessToken: string) => {
+  pendingRequests.forEach((resolve) => resolve(newAccessToken));
+  pendingRequests = [];
+};
+
+const forceLogout = () => {
+  storage.clearAll();
+  // Limpia el store de Zustand de forma lazy para evitar imports circulares
+  import('@/features/auth/store/authStore').then(({ useAuthStore }) => {
+    useAuthStore.getState().logout();
+  });
+  window.location.href = '/login';
+};
+
 axiosInstance.interceptors.response.use(
   (response) => response,
   async (error: AxiosError) => {
-    const originalRequest = error.config;
+    const originalRequest = error.config as typeof error.config & { _retry?: boolean };
 
-    // Si el error es 401 (Unauthorized), intentar refrescar el token
-    if (error.response?.status === 401 && originalRequest && !('_retry' in originalRequest)) {
-      const _retry = originalRequest as any;
-      _retry._retry = true;
-
-      try {
-        const refreshToken = localStorage.getItem('refreshToken');
-        if (refreshToken) {
-          const response = await axios.post(`${API_CONFIG.BASE_URL}/auth/refresh`, {
-            refreshToken,
-          });
-
-          const { accessToken, refreshToken: newRefreshToken } = response.data.data;
-          localStorage.setItem('accessToken', accessToken);
-          localStorage.setItem('refreshToken', newRefreshToken);
-
-          axiosInstance.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
-          return axiosInstance(originalRequest);
-        }
-      } catch (refreshError) {
-        // Si falla el refresh, logout del usuario
-        localStorage.removeItem('accessToken');
-        localStorage.removeItem('refreshToken');
-        window.location.href = '/login';
-        return Promise.reject(refreshError);
-      }
+    // Solo actúa en errores 401 y evita reintentar el propio endpoint de refresh
+    if (
+      error.response?.status !== 401 ||
+      !originalRequest ||
+      originalRequest._retry ||
+      originalRequest.url?.includes('/auth/refresh')
+    ) {
+      return Promise.reject(error);
     }
 
-    return Promise.reject(error);
+    // Si ya hay un refresh en curso, encolar esta petición
+    if (isRefreshing) {
+      return new Promise<string>((resolve) => {
+        pendingRequests.push(resolve);
+      }).then((newToken) => {
+        originalRequest.headers!.Authorization = `Bearer ${newToken}`;
+        return axiosInstance(originalRequest);
+      });
+    }
+
+    originalRequest._retry = true;
+    isRefreshing = true;
+
+    try {
+      const currentRefreshToken = storage.getRefreshToken();
+
+      if (!currentRefreshToken) {
+        forceLogout();
+        return Promise.reject(error);
+      }
+
+      // ── Criterio 1: Enviar refreshToken en el body ──────────────────────
+      const response = await axios.post(`${API_CONFIG.BASE_URL}/auth/refresh`, {
+        refreshToken: currentRefreshToken,
+      });
+
+      // ── Criterio 3: Guardar nuevo par (rotación) ─────────────────────────
+      // El token anterior queda inválido en el backend (Criterio 4)
+      const { accessToken: newAccessToken, refreshToken: newRefreshToken } =
+        response.data.data;
+
+      storage.setTokens(newAccessToken, newRefreshToken);
+      axiosInstance.defaults.headers.common.Authorization = `Bearer ${newAccessToken}`;
+
+      // Resolver peticiones en espera con el nuevo token
+      processPendingRequests(newAccessToken);
+
+      // Reintentar la petición original
+      originalRequest.headers!.Authorization = `Bearer ${newAccessToken}`;
+      return axiosInstance(originalRequest);
+    } catch (refreshError) {
+      // Refresh falló — el token está invalidado o expirado
+      pendingRequests = [];
+      forceLogout();
+      return Promise.reject(refreshError);
+    } finally {
+      isRefreshing = false;
+    }
   }
 );
 
