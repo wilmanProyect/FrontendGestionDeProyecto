@@ -1,30 +1,96 @@
 @import "tailwindcss";
 
 @theme {
-  /* Marca principal (Violeta actual) */
-  --color-brand-300: var(--color-violet-300);
-  --color-brand-400: var(--color-violet-400);
-  --color-brand-500: var(--color-violet-500);
-  --color-brand-600: var(--color-violet-600);
-  --color-brand-900: var(--color-violet-900);
-  --color-brand-950: var(--color-violet-950);
+  /*
+   * ═══════════════════════════════════════════════════════════════════════════
+   *  PALETA: CodeForge Technical Branding
+   * ═══════════════════════════════════════════════════════════════════════════
+   *
+   *  brand   → Forge Blue    #0052FF  — Botones CTA principales, identidad
+   *  accent  → Steel Glint   #00C2FF  — Hover, bordes activos, iconografía
+   *  surface → Deep Space    #0B121E  — Fondo base dark mode (escala 950→50)
+   *  cta     → Tech Mint     #00D1B2  — Éxito, sistemas activos, badges OK
+   *  violet  → Neural Violet #6366F1  — IA, datos, info técnica compleja
+   *
+   *  Gradientes predefinidos (usa con bg-[--gradient-forge] etc.):
+   *   --gradient-forge      135deg: Forge Blue → Neural Violet
+   *   --gradient-interface  to-right: Deep Space → Sidebar dark
+   * ═══════════════════════════════════════════════════════════════════════════
+   */
 
-  /* Acento (Índigo actual) */
-  --color-accent-300: var(--color-indigo-300);
-  --color-accent-500: var(--color-indigo-500);
-  --color-accent-600: var(--color-indigo-600);
-  --color-accent-900: var(--color-indigo-900);
-  --color-accent-950: var(--color-indigo-950);
+  /* ── BRAND: Forge Blue (#0052FF) ─────────────────────────────────────────
+     Primary CTAs, logotipo, focus rings, títulos con gradiente           */
+  --color-brand-100: #e6edff;
+  --color-brand-200: #ccdbff;
+  --color-brand-300: #99b8ff;
+  --color-brand-400: #6694ff;  /* hover links */
+  --color-brand-500: #0052ff;  /* ← BASE — WCAG AA sobre blanco */
+  --color-brand-600: #0042cc;  /* hover botones */
+  --color-brand-700: #003199;
+  --color-brand-800: #002166;
+  --color-brand-900: #001033;
+  --color-brand-950: #00081a;
 
-  /* Superficies (Slate actual) */
-  --color-surface-300: var(--color-slate-300);
-  --color-surface-400: var(--color-slate-400);
-  --color-surface-500: var(--color-slate-500);
-  --color-surface-600: var(--color-slate-600);
-  --color-surface-700: var(--color-slate-700);
-  --color-surface-800: var(--color-slate-800);
-  --color-surface-900: var(--color-slate-900);
-  --color-surface-950: var(--color-slate-950);
+  /* ── ACCENT: Steel Glint (#00C2FF) ───────────────────────────────────────
+     Hover states, bordes activos, iconografía futurista                  */
+  --color-accent-100: #e6f9ff;
+  --color-accent-200: #ccf3ff;
+  --color-accent-300: #99e8ff;
+  --color-accent-400: #4dd5ff;
+  --color-accent-500: #00c2ff;  /* ← BASE */
+  --color-accent-600: #009bcc;  /* hover */
+  --color-accent-700: #007499;
+  --color-accent-800: #004d66;
+  --color-accent-900: #002733;
+  --color-accent-950: #00131a;
+
+  /* ── CTA / SUCCESS: Tech Mint (#00D1B2) ──────────────────────────────────
+     Éxito, estados activos, badges OK, métricas positivas                */
+  --color-cta-100: #e0fdf8;
+  --color-cta-200: #b3f9ee;
+  --color-cta-300: #73f0e0;
+  --color-cta-400: #26e2ce;
+  --color-cta-500: #00d1b2;    /* ← BASE */
+  --color-cta-600: #00a890;    /* hover */
+  --color-cta-700: #007d6c;
+  --color-cta-800: #005248;
+  --color-cta-900: #002924;
+  --color-cta-950: #001512;
+
+  /* ── NEURAL: Neural Violet (#6366F1) ─────────────────────────────────────
+     IA, arquitectura, datos complejos, deep tech                         */
+  --color-violet-100: #eef0fd;
+  --color-violet-200: #dcdefe;
+  --color-violet-300: #b9bdfb;
+  --color-violet-400: #8d91f5;
+  --color-violet-500: #6366f1;  /* ← BASE */
+  --color-violet-600: #4f52c1;  /* hover */
+  --color-violet-700: #3a3d91;
+  --color-violet-800: #252861;
+  --color-violet-900: #151731;
+  --color-violet-950: #0a0b19;
+
+  /* ── SURFACE: Deep Space → Ice Sheet ────────────────────────────────────
+     950 = fondo más oscuro (#0B121E)   50 = Ice Sheet (#F5F8FA)
+     Bordes de separación: surface-600/20 = Violeta al 20% de opacidad   */
+  --color-surface-50:  #f5f8fa;   /* Ice Sheet — fondos claros, tarjetas */
+  --color-surface-100: #e8edf2;
+  --color-surface-200: #c5ced9;
+  --color-surface-300: #9aaab9;   /* texto secundario light */
+  --color-surface-400: #6f8799;   /* texto muted */
+  --color-surface-500: #4d6478;   /* iconos sutiles */
+  --color-surface-600: #334d62;   /* bordes de separación */
+  --color-surface-700: #1e293b;   /* sidebar / consola (Interface gradient end) */
+  --color-surface-800: #131c2e;   /* secciones oscuras */
+  --color-surface-900: #0d1624;   /* panel lateral */
+  --color-surface-950: #0b121e;   /* ← BASE Deep Space — fondo principal */
+
+  /* ── GRADIENTES ──────────────────────────────────────────────────────────
+     Uso: style={{ background: 'var(--gradient-forge)' }}
+     o con Tailwind: bg-[var(--gradient-forge)]                          */
+  --gradient-forge:     linear-gradient(135deg, #0052ff 0%, #6366f1 100%);
+  --gradient-interface: linear-gradient(to right, #0b121e 0%, #1e293b 100%);
+  --gradient-brand-glow: linear-gradient(135deg, #0052ff 0%, #00c2ff 100%);
 }
 
 @layer base {
@@ -37,5 +103,7 @@
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    background-color: #0b121e; /* surface-950: Deep Space */
+    color: #f5f8fa;             /* surface-50: Ice Sheet */
   }
 }

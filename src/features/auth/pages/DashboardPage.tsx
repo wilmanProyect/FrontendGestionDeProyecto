@@ -1,122 +1,123 @@
 /**
- * Página de bienvenida temporal — se mostrará tras login exitoso
- * (Con o sin 2FA)
+ * DashboardPage — Pantalla de bienvenida con AppLayout + Sidebar
  */
 
 import { useAuthStore } from '@/features/auth/store/authStore';
-import { useNavigate } from 'react-router-dom';
+import { AppLayout } from '@/shared/components/AppLayout';
 
 export const DashboardPage = () => {
-  const { user, logout } = useAuthStore();
-  const navigate = useNavigate();
+  const { user } = useAuthStore();
 
-  const handleLogout = () => {
-    logout();
-    navigate('/login');
-  };
+  const hour = new Date().getHours();
+  const greeting =
+    hour < 12 ? 'Buenos días' : hour < 18 ? 'Buenas tardes' : 'Buenas noches';
 
   return (
-    <div className="min-h-screen bg-surface-950 flex items-center justify-center px-6">
-      {/* Orbes decorativos */}
-      <div className="fixed top-[-100px] left-[-100px] w-96 h-96 rounded-full bg-brand-600/10 blur-3xl pointer-events-none" />
-      <div className="fixed bottom-[-80px] right-[-80px] w-80 h-80 rounded-full bg-accent-500/10 blur-3xl pointer-events-none" />
+    <AppLayout>
+      <div className="p-8">
 
-      <div className="relative text-center max-w-md w-full">
-        {/* Ícono de éxito animado */}
-        <div className="mx-auto mb-6 w-24 h-24 rounded-full bg-emerald-500/10 border-2 border-emerald-500/40 flex items-center justify-center">
-          <svg
-            className="w-12 h-12 text-emerald-400"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M5 13l4 4L19 7"
-            />
-          </svg>
-        </div>
-
-        {/* Mensaje principal */}
-        <h1 className="text-3xl font-bold text-white tracking-tight mb-3">
-          ¡Login exitoso!
-        </h1>
-
-        <p className="text-surface-400 mb-2">
-          Bienvenido de nuevo,{' '}
-          <span className="text-brand-400 font-semibold">
-            {user ? `${user.firstName} ${user.lastName}` : 'Usuario'}
-          </span>
-        </p>
-
-        <p className="text-surface-500 text-sm mb-10">
-          {user?.email}
-        </p>
-
-        {/* Badges de info */}
-        <div className="flex flex-wrap justify-center gap-2 mb-10">
-          <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/30 px-3 py-1 text-xs font-medium text-emerald-400">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-            Autenticado
-          </span>
-          <span className="inline-flex items-center gap-1.5 rounded-full bg-brand-500/10 border border-brand-500/30 px-3 py-1 text-xs font-medium text-brand-400">
-            <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-            </svg>
-            Sesión segura
-          </span>
-        </div>
-
-        {/* Card de información */}
-        <div className="bg-surface-900/60 backdrop-blur-xl border border-surface-800 rounded-2xl p-6 mb-8 text-left">
-          <h3 className="text-xs font-semibold text-surface-500 uppercase tracking-widest mb-4">
-            Información de sesión
-          </h3>
-          <div className="space-y-3">
-            <div className="flex justify-between items-center">
-              <span className="text-sm text-surface-400">Nombre</span>
-              <span className="text-sm font-medium text-white">
-                {user ? `${user.firstName} ${user.lastName}` : '—'}
-              </span>
-            </div>
-            <div className="h-px bg-surface-800" />
-            <div className="flex justify-between items-center">
-              <span className="text-sm text-surface-400">Correo</span>
-              <span className="text-sm font-medium text-white">{user?.email ?? '—'}</span>
-            </div>
-            <div className="h-px bg-surface-800" />
-            <div className="flex justify-between items-center">
-              <span className="text-sm text-surface-400">Email verificado</span>
-              <span className={`text-sm font-medium ${user?.emailVerified ? 'text-emerald-400' : 'text-amber-400'}`}>
-                {user?.emailVerified ? 'Sí' : 'Pendiente'}
-              </span>
-            </div>
+        {/* ── Header ────────────────────────────────────────────────── */}
+        <div className="mb-8">
+          <div className="flex items-center gap-3 mb-1">
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-cta-500/10 border border-cta-500/30 px-2.5 py-0.5 text-xs text-cta-400 font-medium">
+              <span className="w-1.5 h-1.5 rounded-full bg-cta-400 animate-pulse" />
+              Sistema activo
+            </span>
           </div>
-        </div>
-
-        {/* Aviso placeholder */}
-        <div className="flex items-start gap-2 rounded-xl bg-surface-800/60 border border-surface-700/50 px-4 py-3 mb-8 text-left">
-          <svg className="w-4 h-4 text-brand-400 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-          </svg>
-          <p className="text-xs text-surface-400">
-            El Dashboard completo está en desarrollo. Esta pantalla confirma que el flujo de autenticación (Login → 2FA → Dashboard) funciona correctamente.
+          <h1 className="text-2xl font-bold text-white">
+            {greeting},{' '}
+            <span
+              className="text-transparent bg-clip-text"
+              style={{ backgroundImage: 'var(--gradient-brand-glow)' }}
+            >
+              {user?.firstName ?? 'Usuario'}
+            </span>{' '}
+            👋
+          </h1>
+          <p className="text-surface-400 mt-1 text-sm">
+            Aquí tienes un resumen de tus proyectos y tareas pendientes.
           </p>
         </div>
 
-        {/* Botón logout */}
-        <button
-          onClick={handleLogout}
-          className="flex items-center justify-center gap-2 mx-auto text-sm text-surface-500 hover:text-surface-300 transition-colors duration-200 group"
-        >
-          <svg className="w-4 h-4 transition-transform duration-200 group-hover:-translate-x-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-          </svg>
-          Cerrar sesión
-        </button>
+        {/* ── Stats cards ───────────────────────────────────────────── */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 mb-8">
+          {[
+            { label: 'Proyectos activos',  value: '3',   delta: '+1 este mes', color: 'brand'  },
+            { label: 'Tareas pendientes',  value: '12',  delta: '3 vencidas',  color: 'accent' },
+            { label: 'Completadas hoy',    value: '5',   delta: '+5 hoy',      color: 'cta'    },
+            { label: 'Miembros del equipo',value: '8',   delta: '2 nuevos',    color: 'violet' },
+          ].map((stat) => (
+            <div
+              key={stat.label}
+              className="rounded-2xl border border-surface-600/20 bg-surface-900/60 backdrop-blur-sm p-5 hover:border-surface-600/40 transition-all duration-200"
+            >
+              <p className="text-xs font-medium text-surface-400 mb-2">{stat.label}</p>
+              <p className={`text-3xl font-bold text-${stat.color}-400 mb-1`}>{stat.value}</p>
+              <p className="text-xs text-surface-500">{stat.delta}</p>
+            </div>
+          ))}
+        </div>
+
+        {/* ── Actividad reciente ────────────────────────────────────── */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+          {/* Proyectos */}
+          <div className="rounded-2xl border border-surface-600/20 bg-surface-900/60 backdrop-blur-sm p-6">
+            <h2 className="text-sm font-semibold text-white mb-4">Proyectos recientes</h2>
+            <div className="space-y-3">
+              {[
+                { name: 'ERP Frontend',  progress: 72, color: '#0052FF' },
+                { name: 'API Gateway',   progress: 45, color: '#00C2FF' },
+                { name: 'Auth Module',   progress: 91, color: '#6366F1' },
+              ].map((p) => (
+                <div key={p.name}>
+                  <div className="flex justify-between items-center mb-1.5">
+                    <div className="flex items-center gap-2">
+                      <span className="w-2 h-2 rounded-full" style={{ backgroundColor: p.color }} />
+                      <span className="text-sm text-surface-300">{p.name}</span>
+                    </div>
+                    <span className="text-xs text-surface-400">{p.progress}%</span>
+                  </div>
+                  <div className="w-full bg-surface-800 rounded-full h-1.5">
+                    <div
+                      className="h-1.5 rounded-full transition-all duration-700"
+                      style={{ width: `${p.progress}%`, backgroundColor: p.color }}
+                    />
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Info de sesión */}
+          <div className="rounded-2xl border border-surface-600/20 bg-surface-900/60 backdrop-blur-sm p-6">
+            <h2 className="text-sm font-semibold text-white mb-4">Sesión actual</h2>
+            <div className="space-y-3">
+              {[
+                { label: 'Nombre',          value: user ? `${user.firstName} ${user.lastName}` : '—' },
+                { label: 'Correo',          value: user?.email ?? '—' },
+                { label: 'Email verificado',value: user?.emailVerified ? '✓ Verificado' : '⚠ Pendiente',
+                  valueClass: user?.emailVerified ? 'text-cta-400' : 'text-amber-400' },
+              ].map((row) => (
+                <div key={row.label} className="flex justify-between items-center py-2 border-b border-surface-800 last:border-0">
+                  <span className="text-sm text-surface-400">{row.label}</span>
+                  <span className={`text-sm font-medium ${row.valueClass ?? 'text-white'}`}>{row.value}</span>
+                </div>
+              ))}
+            </div>
+
+            {/* Aviso */}
+            <div className="mt-4 flex items-start gap-2 rounded-xl bg-brand-500/5 border border-brand-500/20 px-3 py-2.5">
+              <svg className="w-3.5 h-3.5 text-accent-400 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <p className="text-xs text-surface-400">
+                Dashboard en desarrollo. El flujo de autenticación (Login → 2FA → Dashboard) está completo.
+              </p>
+            </div>
+          </div>
+        </div>
       </div>
-    </div>
+    </AppLayout>
   );
 };
