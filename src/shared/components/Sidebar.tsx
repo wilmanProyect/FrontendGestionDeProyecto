@@ -73,6 +73,11 @@ const Icon = {
       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
     </svg>
   ),
+  Components: () => (
+    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+    </svg>
+  ),
   Folder: ({ color }: { color: string }) => (
     <span className="w-2 h-2 rounded-full shrink-0" style={{ backgroundColor: color }} />
   ),
@@ -105,6 +110,7 @@ export const Sidebar = () => {
   const [collapsed, setCollapsed] = useState(false);
   const [notifEnabled, setNotifEnabled] = useState(true);
   const [openProjects, setOpenProjects] = useState<Record<string, boolean>>({});
+  const [componentsOpen, setComponentsOpen] = useState(false);
   const [searchValue, setSearchValue] = useState('');
 
   const isActive = (href: string) => location.pathname === href;
@@ -225,6 +231,61 @@ export const Sidebar = () => {
             )}
           </button>
         ))}
+
+        {/* ── Sección Componentes Reutilizables ──────────────────────── */}
+        {!collapsed && (
+          <div className="pt-2">
+            <button
+              onClick={() => setComponentsOpen(!componentsOpen)}
+              className={`w-full flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all duration-200 border border-transparent
+                ${componentsOpen ? 'bg-surface-700/30 text-white' : 'text-surface-300 hover:bg-surface-700/50 hover:text-white'}`}
+            >
+              <span className={`shrink-0 transition-colors duration-200 ${componentsOpen ? 'text-accent-400' : 'text-surface-400'}`}>
+                <Icon.Components />
+              </span>
+              <span className="flex-1 text-left truncate">Componentes reutilizables</span>
+              <span className={`text-surface-500 transition-transform duration-200 ${componentsOpen ? 'rotate-180' : ''}`}>
+                <Icon.ChevronDown />
+              </span>
+            </button>
+
+            {componentsOpen && (
+              <div className="ml-5 mt-1 space-y-0.5 border-l border-surface-600/30 pl-3">
+                {[
+                  { name: 'Alert',        href: '/components/alert' },
+                  { name: 'Avatar',       href: '/components/avatar' },
+                  { name: 'AvatarGroup',  href: '/components/avatar-group' },
+                  { name: 'Badge',        href: '/components/badge' },
+                  { name: 'Button',       href: '/components/button' },
+                  { name: 'Card',         href: '/components/card' },
+                  { name: 'Dropdown',     href: '/components/dropdown' },
+                  { name: 'EmptyState',   href: '/components/empty-state' },
+                  { name: 'FormField',    href: '/components/form-field' },
+                  { name: 'Input',        href: '/components/input' },
+                  { name: 'Kanban',       href: '/components/kanban' },
+                  { name: 'Modal',        href: '/components/modal' },
+                  { name: 'Priority',     href: '/components/priority' },
+                  { name: 'ProgressBar',  href: '/components/progress-bar' },
+                  { name: 'Select',       href: '/components/select' },
+                  { name: 'Skeleton',     href: '/components/skeleton' },
+                  { name: 'Spinner',      href: '/components/spinner' },
+                  { name: 'Tabs',         href: '/components/tabs' },
+                  { name: 'Toast',        href: '/components/toast' },
+                  { name: 'Toggle',       href: '/components/toggle' },
+                  { name: 'Tooltip',      href: '/components/tooltip' },
+                ].map((comp) => (
+                  <button
+                    key={comp.name}
+                    onClick={() => navigate(comp.href)}
+                    className="w-full text-left rounded-lg px-2 py-1.5 text-xs text-surface-400 hover:text-white hover:bg-surface-700/40 transition-all duration-150"
+                  >
+                    {comp.name}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
 
         {/* ── Sección Proyectos ───────────────────────────────────────── */}
         {!collapsed && (
