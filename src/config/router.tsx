@@ -8,6 +8,11 @@ import { ProtectedRoute } from '@/shared/components/ProtectedRoute';
 import { VerifyEmailPage } from '@/features/auth/pages/VerifyEmailPage';
 import { Verify2FAPage } from '@/features/auth/pages/Verify2FAPage';
 import { DashboardPage } from '@/features/auth/pages/DashboardPage';
+import { AppLayout } from '@/shared/components/AppLayout';
+import { ToastProvider } from '@/shared/components/Toast';
+
+// ── Showcase (nueva página unificada) ────────────────────────────────────
+import { ComponentsShowcase } from '@/shared/components/ComponentsShowcase';
 
 // Página 404
 const NotFoundPage = () => (
@@ -59,6 +64,43 @@ export const routes: RouteObject[] = [
       </ProtectedRoute>
     ),
   },
+
+  // ── Design System — Showcase unificado ──────────────────────────────────
+  // Todos los componentes en /components con sidebar de navegación interna.
+  // Las rutas individuales /components/button etc. ya no son necesarias
+  // pero se mantienen como redirects por compatibilidad.
+  {
+    path: '/components',
+    element: (
+      <ToastProvider>
+        <AppLayout>
+          <ComponentsShowcase />
+        </AppLayout>
+      </ToastProvider>
+    ),
+  },
+
+  // Redirects de rutas antiguas → showcase unificado
+  { path: '/components/alert',       element: <Navigate to="/components#alert"       replace /> },
+  { path: '/components/avatar',      element: <Navigate to="/components#avatar"      replace /> },
+  { path: '/components/avatar-group',element: <Navigate to="/components#avatar-group"replace /> },
+  { path: '/components/badge',       element: <Navigate to="/components#badge"       replace /> },
+  { path: '/components/button',      element: <Navigate to="/components#button"      replace /> },
+  { path: '/components/card',        element: <Navigate to="/components#card"        replace /> },
+  { path: '/components/dropdown',    element: <Navigate to="/components#dropdown"    replace /> },
+  { path: '/components/empty-state', element: <Navigate to="/components#empty-state" replace /> },
+  { path: '/components/input',       element: <Navigate to="/components#input"       replace /> },
+  { path: '/components/kanban',      element: <Navigate to="/components#kanban"      replace /> },
+  { path: '/components/modal',       element: <Navigate to="/components#modal"       replace /> },
+  { path: '/components/priority',    element: <Navigate to="/components#priority"    replace /> },
+  { path: '/components/progress-bar',element: <Navigate to="/components#progress"    replace /> },
+  { path: '/components/select',      element: <Navigate to="/components#select"      replace /> },
+  { path: '/components/spinner',     element: <Navigate to="/components#spinner"     replace /> },
+  { path: '/components/tabs',        element: <Navigate to="/components#tabs"        replace /> },
+  { path: '/components/toast',       element: <Navigate to="/components#toast"       replace /> },
+  { path: '/components/toggle',      element: <Navigate to="/components#toggle"      replace /> },
+  { path: '/components/tooltip',     element: <Navigate to="/components#tooltip"     replace /> },
+
   {
     path: '*',
     element: <NotFoundPage />,
