@@ -4,9 +4,11 @@
  * Colapsable, con búsqueda, navegación y sección de proyectos
  */
 
-import { useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useAuthStore } from '@/features/auth/store/authStore';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { boardApi } from '@/features/project/api/boardApi';
+import type { Project } from '@/features/project/types/board.types';
 
 // ── Tipos ──────────────────────────────────────────────────────────────────
 interface NavItem {
@@ -16,13 +18,6 @@ interface NavItem {
   href: string;
   badge?: number;
   toggle?: boolean;
-}
-
-interface Project {
-  id: string;
-  name: string;
-  color: string;
-  open?: boolean;
 }
 
 // ── Iconos inline ──────────────────────────────────────────────────────────
@@ -95,11 +90,22 @@ const NAV_ITEMS: NavItem[] = [
   { id: 'notif',     label: 'Notificaciones', icon: <Icon.Bell />, href: '/notifications', toggle: true },
 ];
 
-const SAMPLE_PROJECTS: Project[] = [
-  { id: '1', name: 'ERP Frontend',    color: '#0052FF' },
-  { id: '2', name: 'API Gateway',     color: '#00C2FF' },
-  { id: '3', name: 'Auth Module',     color: '#6366F1' },
+const PROJECT_COLORS = [
+  '#0052FF',
+  '#00C2FF',
+  '#6366F1',
+  '#14B8A6',
+  '#F59E0B',
+  '#EC4899',
 ];
+
+const getProjectColor = (projectId: string) => {
+  const savedColor = localStorage.getItem(`project-color:${projectId}`);
+  if (savedColor) return savedColor;
+
+  const hash = Array.from(projectId).reduce((acc, char) => acc + char.charCodeAt(0), 0);
+  return PROJECT_COLORS[hash % PROJECT_COLORS.length];
+};
 
 // ── Componente principal ───────────────────────────────────────────────────
 export const Sidebar = () => {
@@ -112,11 +118,67 @@ export const Sidebar = () => {
   const [openProjects, setOpenProjects] = useState<Record<string, boolean>>({});
   const [componentsOpen, setComponentsOpen] = useState(false);
   const [searchValue, setSearchValue] = useState('');
+  const [projects, setProjects] = useState<Project[]>([]);
+  const [projectsLoading, setProjectsLoading] = useState(true);
+  const [projectsError, setProjectsError] = useState<string | null>(null);
+  const [, setProjectColorVersion] = useState(0);
 
   const isActive = (href: string) => location.pathname === href;
 
+  useEffect(() => {
+    let mounted = true;
+
+    const loadProjects = async () => {
+      setProjectsLoading(true);
+      setProjectsError(null);
+
+      try {
+        const data = await boardApi.listProjects();
+        if (mounted) {
+          setProjects(data.filter((project) => !project.isArchived));
+        }
+      } catch {
+        if (mounted) {
+          setProjectsError('No se pudieron cargar los proyectos');
+        }
+      } finally {
+        if (mounted) {
+          setProjectsLoading(false);
+        }
+      }
+    };
+
+    loadProjects();
+
+    return () => {
+      mounted = false;
+    };
+  }, []);
+
+  useEffect(() => {
+    const handleProjectColorChanged = () => {
+      setProjectColorVersion((version) => version + 1);
+    };
+
+    window.addEventListener('project-color-changed', handleProjectColorChanged);
+    return () => window.removeEventListener('project-color-changed', handleProjectColorChanged);
+  }, []);
+
+  const filteredProjects = useMemo(() => {
+    const query = searchValue.trim().toLowerCase();
+    if (!query) return projects;
+
+    return projects.filter((project) =>
+      project.name.toLowerCase().includes(query),
+    );
+  }, [projects, searchValue]);
+
   const toggleProject = (id: string) =>
     setOpenProjects((prev) => ({ ...prev, [id]: !prev[id] }));
+
+  const goToProjectBoard = (projectId: string) => {
+    navigate(`/projects/${projectId}/board`);
+  };
 
   const handleLogout = () => {
     logout();
@@ -214,8 +276,18 @@ export const Sidebar = () => {
 
                 {/* Toggle */}
                 {item.toggle !== undefined && (
-                  <button
+                  <span
+                    role="switch"
+                    tabIndex={0}
+                    aria-checked={notifEnabled}
                     onClick={(e) => { e.stopPropagation(); setNotifEnabled((v) => !v); }}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        setNotifEnabled((v) => !v);
+                      }
+                    }}
                     className={`ml-auto relative w-9 h-5 rounded-full transition-colors duration-200 shrink-0 ${
                       notifEnabled ? 'bg-brand-500' : 'bg-surface-600'
                     }`}
@@ -225,7 +297,7 @@ export const Sidebar = () => {
                         notifEnabled ? 'translate-x-4' : 'translate-x-0'
                       }`}
                     />
-                  </button>
+                  </span>
                 )}
               </>
             )}
@@ -294,13 +366,27 @@ export const Sidebar = () => {
               Proyectos
             </p>
             <div className="space-y-1">
-              {SAMPLE_PROJECTS.map((project) => (
+              {projectsLoading && (
+                <p className="px-3 py-2 text-xs text-surface-500">Cargando proyectos...</p>
+              )}
+
+              {!projectsLoading && projectsError && (
+                <p className="px-3 py-2 text-xs text-red-300">{projectsError}</p>
+              )}
+
+              {!projectsLoading && !projectsError && filteredProjects.length === 0 && (
+                <p className="px-3 py-2 text-xs text-surface-500">
+                  {projects.length === 0 ? 'Aun no tienes proyectos' : 'Sin resultados'}
+                </p>
+              )}
+
+              {!projectsLoading && !projectsError && filteredProjects.map((project) => (
                 <div key={project.id}>
                   <button
                     onClick={() => toggleProject(project.id)}
                     className="w-full flex items-center gap-3 rounded-xl px-3 py-2 text-sm text-surface-300 hover:bg-surface-700/50 hover:text-white border border-transparent transition-all duration-200"
                   >
-                    <Icon.Folder color={project.color} />
+                    <Icon.Folder color={getProjectColor(project.id)} />
                     <span className="flex-1 text-left truncate">{project.name}</span>
                     <span className={`text-surface-500 transition-transform duration-200 ${openProjects[project.id] ? 'rotate-180' : ''}`}>
                       <Icon.ChevronDown />
@@ -310,12 +396,17 @@ export const Sidebar = () => {
                   {/* Subitems expandibles */}
                   {openProjects[project.id] && (
                     <div className="ml-5 mt-0.5 space-y-0.5 border-l border-surface-600/30 pl-3">
-                      {['Tablero', 'Tareas', 'Miembros'].map((sub) => (
+                      {[
+                        { label: 'Tablero', href: `/projects/${project.id}/board` },
+                        { label: 'Miembros', href: `/projects/${project.id}/board` },
+                        { label: 'Configuración', href: `/projects/${project.id}/settings` },
+                      ].map((sub) => (
                         <button
-                          key={sub}
+                          key={sub.label}
+                          onClick={() => navigate(sub.href)}
                           className="w-full text-left rounded-lg px-2 py-1.5 text-xs text-surface-400 hover:text-white hover:bg-surface-700/40 transition-all duration-150"
                         >
-                          {sub}
+                          {sub.label}
                         </button>
                       ))}
                     </div>
@@ -329,9 +420,21 @@ export const Sidebar = () => {
         {/* Proyectos colapsado — solo puntos de color */}
         {collapsed && (
           <div className="pt-4 space-y-2">
-            {SAMPLE_PROJECTS.map((p) => (
+            {projectsLoading && (
+              <div className="flex justify-center">
+                <span className="w-2.5 h-2.5 rounded-full bg-surface-600 animate-pulse" />
+              </div>
+            )}
+
+            {!projectsLoading && filteredProjects.map((p) => (
               <div key={p.id} className="flex justify-center">
-                <span className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: p.color }} />
+                <button
+                  onClick={() => goToProjectBoard(p.id)}
+                  className="w-6 h-6 rounded-lg flex items-center justify-center hover:bg-surface-700/50 transition-colors duration-150"
+                  aria-label={`Abrir ${p.name}`}
+                >
+                  <span className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: getProjectColor(p.id) }} />
+                </button>
               </div>
             ))}
           </div>

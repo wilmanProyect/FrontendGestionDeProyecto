@@ -1,5 +1,7 @@
 /**
- * Configuración de rutas principales de la aplicación
+ * router.tsx
+ * Configuración de rutas principales.
+ * Agregada la ruta /projects/:id/board para el tablero Kanban.
  */
 
 import { createBrowserRouter, type RouteObject, Navigate } from 'react-router-dom';
@@ -10,9 +12,11 @@ import { Verify2FAPage } from '@/features/auth/pages/Verify2FAPage';
 import { DashboardPage } from '@/features/auth/pages/DashboardPage';
 import { AppLayout } from '@/shared/components/AppLayout';
 import { ToastProvider } from '@/shared/components/Toast';
-
-// ── Showcase (nueva página unificada) ────────────────────────────────────
 import { ComponentsShowcase } from '@/shared/components/ComponentsShowcase';
+
+// ── Feature: projects ─────────────────────────────────────────────────────
+import { BoardPage } from '@/features/project/components/BoardPage';
+import { ProjectSettingsPage } from '@/features/project/components/ProjectSettingsPage';
 
 // Página 404
 const NotFoundPage = () => (
@@ -65,10 +69,29 @@ export const routes: RouteObject[] = [
     ),
   },
 
-  // ── Design System — Showcase unificado ──────────────────────────────────
-  // Todos los componentes en /components con sidebar de navegación interna.
-  // Las rutas individuales /components/button etc. ya no son necesarias
-  // pero se mantienen como redirects por compatibilidad.
+  // ── Tablero Kanban ────────────────────────────────────────────────────
+  // Ruta: /projects/:id/board
+  // NOTA: AppLayout ya está incluido dentro de BoardPage para mantener
+  //       la arquitectura consistente con DashboardPage.
+  {
+    path: '/projects/:id/board',
+    element: (
+      <ProtectedRoute>
+        <BoardPage />
+      </ProtectedRoute>
+    ),
+  },
+
+  {
+    path: '/projects/:id/settings',
+    element: (
+      <ProtectedRoute>
+        <ProjectSettingsPage />
+      </ProtectedRoute>
+    ),
+  },
+
+  // ── Design System — Showcase ──────────────────────────────────────────
   {
     path: '/components',
     element: (
@@ -80,26 +103,26 @@ export const routes: RouteObject[] = [
     ),
   },
 
-  // Redirects de rutas antiguas → showcase unificado
-  { path: '/components/alert',       element: <Navigate to="/components#alert"       replace /> },
-  { path: '/components/avatar',      element: <Navigate to="/components#avatar"      replace /> },
-  { path: '/components/avatar-group',element: <Navigate to="/components#avatar-group"replace /> },
-  { path: '/components/badge',       element: <Navigate to="/components#badge"       replace /> },
-  { path: '/components/button',      element: <Navigate to="/components#button"      replace /> },
-  { path: '/components/card',        element: <Navigate to="/components#card"        replace /> },
-  { path: '/components/dropdown',    element: <Navigate to="/components#dropdown"    replace /> },
-  { path: '/components/empty-state', element: <Navigate to="/components#empty-state" replace /> },
-  { path: '/components/input',       element: <Navigate to="/components#input"       replace /> },
-  { path: '/components/kanban',      element: <Navigate to="/components#kanban"      replace /> },
-  { path: '/components/modal',       element: <Navigate to="/components#modal"       replace /> },
-  { path: '/components/priority',    element: <Navigate to="/components#priority"    replace /> },
-  { path: '/components/progress-bar',element: <Navigate to="/components#progress"    replace /> },
-  { path: '/components/select',      element: <Navigate to="/components#select"      replace /> },
-  { path: '/components/spinner',     element: <Navigate to="/components#spinner"     replace /> },
-  { path: '/components/tabs',        element: <Navigate to="/components#tabs"        replace /> },
-  { path: '/components/toast',       element: <Navigate to="/components#toast"       replace /> },
-  { path: '/components/toggle',      element: <Navigate to="/components#toggle"      replace /> },
-  { path: '/components/tooltip',     element: <Navigate to="/components#tooltip"     replace /> },
+  // Redirects de rutas antiguas
+  { path: '/components/alert',        element: <Navigate to="/components#alert"        replace /> },
+  { path: '/components/avatar',       element: <Navigate to="/components#avatar"       replace /> },
+  { path: '/components/avatar-group', element: <Navigate to="/components#avatar-group" replace /> },
+  { path: '/components/badge',        element: <Navigate to="/components#badge"        replace /> },
+  { path: '/components/button',       element: <Navigate to="/components#button"       replace /> },
+  { path: '/components/card',         element: <Navigate to="/components#card"         replace /> },
+  { path: '/components/dropdown',     element: <Navigate to="/components#dropdown"     replace /> },
+  { path: '/components/empty-state',  element: <Navigate to="/components#empty-state"  replace /> },
+  { path: '/components/input',        element: <Navigate to="/components#input"        replace /> },
+  { path: '/components/kanban',       element: <Navigate to="/components#kanban"       replace /> },
+  { path: '/components/modal',        element: <Navigate to="/components#modal"        replace /> },
+  { path: '/components/priority',     element: <Navigate to="/components#priority"     replace /> },
+  { path: '/components/progress-bar', element: <Navigate to="/components#progress"     replace /> },
+  { path: '/components/select',       element: <Navigate to="/components#select"       replace /> },
+  { path: '/components/spinner',      element: <Navigate to="/components#spinner"      replace /> },
+  { path: '/components/tabs',         element: <Navigate to="/components#tabs"         replace /> },
+  { path: '/components/toast',        element: <Navigate to="/components#toast"        replace /> },
+  { path: '/components/toggle',       element: <Navigate to="/components#toggle"       replace /> },
+  { path: '/components/tooltip',      element: <Navigate to="/components#tooltip"      replace /> },
 
   {
     path: '*',
