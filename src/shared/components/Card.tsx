@@ -4,11 +4,11 @@
  * Extraído y consistente con DashboardPage.tsx
  */
 
-import type { HTMLAttributes, ReactNode } from 'react';
+import type { ElementType, HTMLAttributes, ReactNode } from 'react';
 
 /* ── Card base ──────────────────────────────────────────────────────── */
 
-export interface CardProps extends HTMLAttributes<HTMLDivElement> {
+export interface CardProps extends HTMLAttributes<HTMLElement> {
   variant?: 'default' | 'elevated' | 'bordered' | 'glass';
   padding?: 'none' | 'sm' | 'md' | 'lg';
   hoverable?: boolean;
@@ -33,12 +33,15 @@ export const Card = ({
   variant = 'default',
   padding = 'md',
   hoverable = false,
-  as: Tag = 'div',
+  as = 'div',
   className = '',
   children,
   ...rest
-}: CardProps) => (
-  <Tag
+}: CardProps) => {
+  const Tag = as as ElementType;
+
+  return (
+    <Tag
     className={[
       'rounded-2xl',
       variantClasses[variant],
@@ -54,7 +57,8 @@ export const Card = ({
   >
     {children}
   </Tag>
-);
+  );
+};
 
 /* ── Card sub-components ────────────────────────────────────────────── */
 
