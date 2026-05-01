@@ -4,6 +4,9 @@
 
 import { useAuthStore } from '@/features/auth/store/authStore';
 import { AppLayout } from '@/shared/components/AppLayout';
+import { CreateProjectWizard } from '@/features/project';
+import { useState } from 'react';
+import { Button } from '@/shared/components/Button';
 
 export const DashboardPage = () => {
   const { user } = useAuthStore();
@@ -12,6 +15,7 @@ export const DashboardPage = () => {
   const greeting =
     hour < 12 ? 'Buenos días' : hour < 18 ? 'Buenas tardes' : 'Buenas noches';
 
+  const [wizardOpen, setWizardOpen] = useState(false);
   return (
     <AppLayout>
       <div className="p-8">
@@ -88,7 +92,8 @@ export const DashboardPage = () => {
               ))}
             </div>
           </div>
-
+          <Button onClick={() => setWizardOpen(true)}>+ Nuevo Proyecto</Button>
+          <CreateProjectWizard open={wizardOpen} onClose={() => setWizardOpen(false)} />
           {/* Info de sesión */}
           <div className="rounded-2xl border border-surface-600/20 bg-surface-900/60 backdrop-blur-sm p-6">
             <h2 className="text-sm font-semibold text-white mb-4">Sesión actual</h2>

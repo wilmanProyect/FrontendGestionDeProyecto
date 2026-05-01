@@ -27,7 +27,7 @@ import { Priority, TaskStatusBadge, DueDate } from '@/shared/components/Priority
 import { ProgressBar, ProgressCircle } from '@/shared/components/ProgressBar';
 import { Select } from '@/shared/components/Select';
 import { Spinner, Skeleton, SkeletonCard } from '@/shared/components/Spinner';
-import { Tabs, TabPanel } from '@/shared/components/Tabs';
+import { Tabs } from '@/shared/components/Tabs';
 import { useToast } from '@/shared/components/Toast';
 import { Toggle } from '@/shared/components/Toggle';
 import { Tooltip } from '@/shared/components/Tooltip';

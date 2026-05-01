@@ -467,25 +467,27 @@ export const KanbanColumn = ({
         {loading ? (
           <ColumnSkeleton />
         ) : count === 0 && !loading ? (
-          /* Estado vacío */
-          <div className="flex flex-col items-center justify-center gap-2 py-8 text-center">
-            <div className="w-10 h-10 rounded-xl border border-dashed border-surface-700/60 flex items-center justify-center">
-              <svg className="w-5 h-5 text-surface-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5}
-                  d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-              </svg>
+          <>
+            <div className="flex flex-col items-center justify-center gap-2 py-8 text-center">
+              <div className="w-10 h-10 rounded-xl border border-dashed border-surface-700/60 flex items-center justify-center">
+                <svg className="w-5 h-5 text-surface-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5}
+                    d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                </svg>
+              </div>
+              <p className="text-xs text-surface-500">Sin tarjetas</p>
+              {onAddCard && (
+                <button
+                  type="button"
+                  onClick={onAddCard}
+                  className="text-xs text-brand-400 hover:text-brand-300 transition-colors duration-150"
+                >
+                  + {addLabel}
+                </button>
+              )}
             </div>
-            <p className="text-xs text-surface-500">Sin tarjetas</p>
-            {onAddCard && (
-              <button
-                type="button"
-                onClick={onAddCard}
-                className="text-xs text-brand-400 hover:text-brand-300 transition-colors duration-150"
-              >
-                + {addLabel}
-              </button>
-            )}
-          </div>
+            {children}
+          </>
         ) : (
           children
         )}
