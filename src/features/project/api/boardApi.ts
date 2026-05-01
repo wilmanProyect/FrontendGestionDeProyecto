@@ -22,12 +22,14 @@ import type {
   BoardLabel,
   BoardMember,
   BoardUser,
+  BoardPriority,
   BoardPermission,
   CreateProjectPayload,
   UpdateProjectPayload,
   CreateListPayload,
   UpdateListPayload,
   CreateTaskPayload,
+  UpdateTaskPayload,
   MoveTaskPayload,
   AddMemberPayload,
   CreateLabelPayload,
@@ -133,6 +135,29 @@ class BoardApi {
     const res = await axiosInstance.post<ApiResponse<BoardTask>>(
       API_ROUTES.TASKS.CREATE(projectId),
       payload,
+    );
+    return unwrap(res);
+  }
+
+  async updateTask(
+    projectId: string,
+    taskId: string,
+    payload: UpdateTaskPayload,
+  ): Promise<BoardTask> {
+    const res = await axiosInstance.patch<ApiResponse<BoardTask>>(
+      API_ROUTES.TASKS.UPDATE(projectId, taskId),
+      payload,
+    );
+    return unwrap(res);
+  }
+
+  async deleteTask(projectId: string, taskId: string): Promise<void> {
+    await axiosInstance.delete(API_ROUTES.TASKS.DELETE(projectId, taskId));
+  }
+
+  async getPriorities(projectId: string): Promise<BoardPriority[]> {
+    const res = await axiosInstance.get<ApiResponse<BoardPriority[]>>(
+      API_ROUTES.TASKS.PRIORITIES(projectId),
     );
     return unwrap(res);
   }

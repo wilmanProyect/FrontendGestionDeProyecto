@@ -11,7 +11,6 @@ import { VerifyEmailPage } from '@/features/auth/pages/VerifyEmailPage';
 import { Verify2FAPage } from '@/features/auth/pages/Verify2FAPage';
 import { DashboardPage } from '@/features/auth/pages/DashboardPage';
 import { AppLayout } from '@/shared/components/AppLayout';
-import { ToastProvider } from '@/shared/components/Toast';
 import { ComponentsShowcase } from '@/shared/components/ComponentsShowcase';
 
 // ── Feature: projects ─────────────────────────────────────────────────────
@@ -95,11 +94,9 @@ export const routes: RouteObject[] = [
   {
     path: '/components',
     element: (
-      <ToastProvider>
-        <AppLayout>
-          <ComponentsShowcase />
-        </AppLayout>
-      </ToastProvider>
+      <AppLayout>
+        <ComponentsShowcase />
+      </AppLayout>
     ),
   },
 

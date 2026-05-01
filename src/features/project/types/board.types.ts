@@ -141,6 +141,15 @@ export interface CreateTaskPayload {
   dueDate?: string;
 }
 
+export interface UpdateTaskPayload {
+  title?: string;
+  description?: string | null;
+  listId?: string | null;
+  assigneeId?: string | null;
+  priorityId?: string | null;
+  dueDate?: string | null;
+}
+
 export interface MoveTaskPayload {
   listId: string;
   position: number;

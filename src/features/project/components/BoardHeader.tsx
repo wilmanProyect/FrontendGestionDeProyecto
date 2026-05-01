@@ -15,6 +15,7 @@ interface BoardHeaderProps {
   projectName: string;
   labels: BoardLabel[];
   members: BoardMember[];
+  onCreateTaskClick?: () => void;
   onMembersClick?: () => void;
   onSettingsClick?: () => void;
 }
@@ -109,6 +110,7 @@ export const BoardHeader = ({
   projectName,
   labels,
   members,
+  onCreateTaskClick,
   onMembersClick,
   onSettingsClick,
 }: BoardHeaderProps) => {
@@ -134,6 +136,18 @@ export const BoardHeader = ({
         </div>
 
         <div className="flex items-center gap-2 shrink-0">
+          <Button
+            size="sm"
+            onClick={onCreateTaskClick}
+            leftIcon={
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+              </svg>
+            }
+          >
+            Nueva tarea
+          </Button>
+
           <Button
             variant="secondary"
             size="sm"
